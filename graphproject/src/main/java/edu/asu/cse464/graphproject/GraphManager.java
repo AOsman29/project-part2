@@ -29,21 +29,17 @@ public class GraphManager {
 
     public void addNodes(String[] nodes) {
         if (nodes == null || nodes.length == 0) return;
-        for (String n : nodes) {
-            addNode(n);
-        }
+        for (String n : nodes) addNode(n);
     }
 
     public void addEdge(String source, String target) {
-        if (!graph.containsVertex(source)) {
-            graph.addVertex(source);
-        }
-        if (!graph.containsVertex(target)) {
-            graph.addVertex(target);
-        }
+        if (!graph.containsVertex(source)) graph.addVertex(source);
+        if (!graph.containsVertex(target)) graph.addVertex(target);
+
         if (graph.containsEdge(source, target)) {
             throw new IllegalArgumentException("Edge already exists: " + source + " -> " + target);
         }
+
         graph.addEdge(source, target);
     }
 
@@ -56,14 +52,14 @@ public class GraphManager {
 
     public void removeNodes(String[] nodes) {
         if (nodes == null || nodes.length == 0) return;
+
+        // Validate all first (atomic remove)
         for (String n : nodes) {
             if (!graph.containsVertex(n)) {
                 throw new IllegalArgumentException("Node does not exist: " + n);
             }
         }
-        for (String n : nodes) {
-            graph.removeVertex(n);
-        }
+        for (String n : nodes) graph.removeVertex(n);
     }
 
     public void removeEdge(String source, String target) {
@@ -73,6 +69,44 @@ public class GraphManager {
         graph.removeEdge(source, target);
     }
 
+    /** New – required by tests */
+    public void exportToDot(String filename) throws IOException {
+        outputDOTGraph(filename);
+    }
+
+    public void outputDOTGraph(String filename) throws IOException {
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>();
+
+        exporter.setVertexAttributeProvider(v -> {
+            Map<String, Attribute> map = new HashMap<>();
+            map.put("label", DefaultAttribute.createAttribute(v));
+            return map;
+        });
+
+        exporter.setEdgeAttributeProvider(e -> {
+            Map<String, Attribute> map = new HashMap<>();
+            map.put("label", DefaultAttribute.createAttribute(
+                    graph.getEdgeSource(e) + "->" + graph.getEdgeTarget(e)
+            ));
+            return map;
+        });
+
+        try (FileWriter writer = new FileWriter(filename)) {
+            exporter.exportGraph(graph, writer);
+        }
+    }
+
+    /** New – required by testFullPipelineSummary() */
+    public void writeGraphSummary(Graph<String, DefaultEdge> g, String filePath) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nodes (" + g.vertexSet().size() + "): " + g.vertexSet()).append("\n");
+        sb.append("Edges (" + g.edgeSet().size() + "): ");
+        for (DefaultEdge e : g.edgeSet()) {
+            sb.append(g.getEdgeSource(e)).append(" -> ").append(g.getEdgeTarget(e)).append("; ");
+        }
+        java.nio.file.Files.writeString(java.nio.file.Paths.get(filePath), sb.toString());
+    }
+
     public void outputGraph(String filePath) throws IOException {
         java.nio.file.Files.writeString(
                 java.nio.file.Paths.get(filePath),
@@ -80,28 +114,10 @@ public class GraphManager {
         );
     }
 
-    public void outputDOTGraph(String filename) throws IOException {
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>();
-        exporter.setVertexAttributeProvider(v -> {
-            Map<String, Attribute> map = new HashMap<>();
-            map.put("label", DefaultAttribute.createAttribute(v));
-            return map;
-        });
-        exporter.setEdgeAttributeProvider(e -> {
-            Map<String, Attribute> m = new HashMap<>();
-            m.put("label", DefaultAttribute.createAttribute(
-                    graph.getEdgeSource(e) + "->" + graph.getEdgeTarget(e)
-            ));
-            return m;
-        });
-        try (FileWriter writer = new FileWriter(filename)) {
-            exporter.exportGraph(graph, writer);
-        }
-    }
-
     public void outputGraphics(String path, String format) throws IOException {
         String dotPath = path + ".dot";
         outputDOTGraph(dotPath);
+
         java.nio.file.Files.writeString(
                 java.nio.file.Paths.get(path + "." + format),
                 "Graph image placeholder (" + format + ")\n" + this.toString()

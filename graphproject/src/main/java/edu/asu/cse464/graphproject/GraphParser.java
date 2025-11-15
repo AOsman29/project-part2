@@ -9,9 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.function.Supplier;
 
-/**
- * Feature 1 – Parse a DOT graph file and create a directed graph.
- */
+
 public class GraphParser {
 
     public Graph<String, DefaultEdge> parseGraph(String filePath) throws IOException {
