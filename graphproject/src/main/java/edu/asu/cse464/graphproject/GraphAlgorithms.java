@@ -7,7 +7,6 @@ import java.util.*;
 
 public class GraphAlgorithms {
 
-
     public Path bfs(Graph<String, DefaultEdge> graph, String src, String dst) {
         if (!graph.containsVertex(src) || !graph.containsVertex(dst)) {
             throw new IllegalArgumentException("Source or destination does not exist in graph");
@@ -52,7 +51,6 @@ public class GraphAlgorithms {
         Collections.reverse(path);
         return new Path(path);
     }
-
 
     public Path dfs(Graph<String, DefaultEdge> graph, String src, String dst) {
         if (!graph.containsVertex(src) || !graph.containsVertex(dst)) {
@@ -100,20 +98,5 @@ public class GraphAlgorithms {
             }
         }
         return false;
-    }
-
- 
-    public Path graphSearch(Graph<String, DefaultEdge> graph,
-                            String src,
-                            String dst,
-                            Algorithm algo) {
-        switch (algo) {
-            case BFS:
-                return bfs(graph, src, dst);
-            case DFS:
-                return dfs(graph, src, dst);
-            default:
-                throw new IllegalArgumentException("Unknown algorithm");
-        }
     }
 }
