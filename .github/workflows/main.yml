@@ -22,7 +22,7 @@ jobs:
         java-version: '17'
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file graphproject/pom.xml
 
     - name: Run Tests
-      run: mvn test
+      run: mvn -f graphproject/pom.xml test
