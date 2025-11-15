@@ -20,9 +20,6 @@ public class GraphManager {
         graph = new SimpleDirectedGraph<>(DefaultEdge.class);
     }
 
-    // -------------------------
-    // Node Operations
-    // -------------------------
 
     public void addNode(String nodeName) {
         if (graph.containsVertex(nodeName)) {
@@ -36,9 +33,6 @@ public class GraphManager {
         for (String n : nodes) addNode(n);
     }
 
-    // -------------------------
-    // Edge Operations
-    // -------------------------
 
     public void addEdge(String source, String target) {
         if (!graph.containsVertex(source)) graph.addVertex(source);
@@ -58,9 +52,7 @@ public class GraphManager {
         graph.removeEdge(source, target);
     }
 
-    // -------------------------
-    // Remove Nodes
-    // -------------------------
+
 
     public void removeNode(String nodeName) {
         if (!graph.containsVertex(nodeName)) {
@@ -83,9 +75,7 @@ public class GraphManager {
         }
     }
 
-    // -------------------------
-    // DOT Exporter (CI Requires Exact Logic)
-    // -------------------------
+
 
     public void exportToDot(String filename) throws IOException {
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>();
@@ -109,9 +99,6 @@ public class GraphManager {
         }
     }
 
-    // -------------------------
-    // Summary Writer (Required by Tests)
-    // -------------------------
 
     public void writeGraphSummary(Graph<String, DefaultEdge> g, String filePath) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -125,9 +112,7 @@ public class GraphManager {
         java.nio.file.Files.writeString(java.nio.file.Paths.get(filePath), sb.toString());
     }
 
-    // -------------------------
-    // Output Whole Graph to TXT
-    // -------------------------
+  
 
     public void outputGraph(String filePath) throws IOException {
         java.nio.file.Files.writeString(
@@ -136,9 +121,7 @@ public class GraphManager {
         );
     }
 
-    // -------------------------
-    // toString()
-    // -------------------------
+
 
     @Override
     public String toString() {

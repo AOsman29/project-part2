@@ -51,4 +51,9 @@ public class GraphAlgorithms {
         Collections.reverse(path);
         return new Path(path);
     }
+
+
+    public Path graphSearch(Graph<String, DefaultEdge> graph, String src, String dst) {
+        return bfs(graph, src, dst);
+    }
 }
