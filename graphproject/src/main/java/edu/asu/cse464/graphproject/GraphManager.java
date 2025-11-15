@@ -20,6 +20,10 @@ public class GraphManager {
         graph = new SimpleDirectedGraph<>(DefaultEdge.class);
     }
 
+    // -------------------------
+    // Node Operations
+    // -------------------------
+
     public void addNode(String nodeName) {
         if (graph.containsVertex(nodeName)) {
             throw new IllegalArgumentException("Node already exists: " + nodeName);
@@ -32,6 +36,10 @@ public class GraphManager {
         for (String n : nodes) addNode(n);
     }
 
+    // -------------------------
+    // Edge Operations
+    // -------------------------
+
     public void addEdge(String source, String target) {
         if (!graph.containsVertex(source)) graph.addVertex(source);
         if (!graph.containsVertex(target)) graph.addVertex(target);
@@ -42,6 +50,17 @@ public class GraphManager {
 
         graph.addEdge(source, target);
     }
+
+    public void removeEdge(String source, String target) {
+        if (!graph.containsEdge(source, target)) {
+            throw new IllegalArgumentException("Edge does not exist: " + source + " -> " + target);
+        }
+        graph.removeEdge(source, target);
+    }
+
+    // -------------------------
+    // Remove Nodes
+    // -------------------------
 
     public void removeNode(String nodeName) {
         if (!graph.containsVertex(nodeName)) {
@@ -58,22 +77,17 @@ public class GraphManager {
                 throw new IllegalArgumentException("Node does not exist: " + n);
             }
         }
-        for (String n : nodes) graph.removeVertex(n);
-    }
 
-    public void removeEdge(String source, String target) {
-        if (!graph.containsEdge(source, target)) {
-            throw new IllegalArgumentException("Edge does not exist: " + source + " -> " + target);
+        for (String n : nodes) {
+            graph.removeVertex(n);
         }
-        graph.removeEdge(source, target);
     }
 
+    // -------------------------
+    // DOT Exporter (CI Requires Exact Logic)
+    // -------------------------
 
     public void exportToDot(String filename) throws IOException {
-        outputDOTGraph(filename);
-    }
-
-    public void outputDOTGraph(String filename) throws IOException {
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>();
 
         exporter.setVertexAttributeProvider(v -> {
@@ -95,16 +109,25 @@ public class GraphManager {
         }
     }
 
-    /** New – required by testFullPipelineSummary() */
+    // -------------------------
+    // Summary Writer (Required by Tests)
+    // -------------------------
+
     public void writeGraphSummary(Graph<String, DefaultEdge> g, String filePath) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("Nodes (" + g.vertexSet().size() + "): " + g.vertexSet()).append("\n");
+
         sb.append("Edges (" + g.edgeSet().size() + "): ");
         for (DefaultEdge e : g.edgeSet()) {
             sb.append(g.getEdgeSource(e)).append(" -> ").append(g.getEdgeTarget(e)).append("; ");
         }
+
         java.nio.file.Files.writeString(java.nio.file.Paths.get(filePath), sb.toString());
     }
+
+    // -------------------------
+    // Output Whole Graph to TXT
+    // -------------------------
 
     public void outputGraph(String filePath) throws IOException {
         java.nio.file.Files.writeString(
@@ -113,21 +136,17 @@ public class GraphManager {
         );
     }
 
-    public void outputGraphics(String path, String format) throws IOException {
-        String dotPath = path + ".dot";
-        outputDOTGraph(dotPath);
-
-        java.nio.file.Files.writeString(
-                java.nio.file.Paths.get(path + "." + format),
-                "Graph image placeholder (" + format + ")\n" + this.toString()
-        );
-    }
+    // -------------------------
+    // toString()
+    // -------------------------
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Nodes (").append(graph.vertexSet().size()).append("): ");
-        sb.append(graph.vertexSet()).append("\n");
+
+        sb.append("Nodes (").append(graph.vertexSet().size()).append("): ")
+                .append(graph.vertexSet()).append("\n");
+
         sb.append("Edges (").append(graph.edgeSet().size()).append("): ");
         for (DefaultEdge e : graph.edgeSet()) {
             sb.append(graph.getEdgeSource(e))
@@ -135,6 +154,7 @@ public class GraphManager {
                     .append(graph.getEdgeTarget(e))
                     .append("; ");
         }
+
         return sb.toString();
     }
 
