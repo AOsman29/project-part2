@@ -53,7 +53,6 @@ public class GraphManager {
     public void removeNodes(String[] nodes) {
         if (nodes == null || nodes.length == 0) return;
 
-        // Validate all first (atomic remove)
         for (String n : nodes) {
             if (!graph.containsVertex(n)) {
                 throw new IllegalArgumentException("Node does not exist: " + n);
@@ -69,7 +68,7 @@ public class GraphManager {
         graph.removeEdge(source, target);
     }
 
-    /** New – required by tests */
+
     public void exportToDot(String filename) throws IOException {
         outputDOTGraph(filename);
     }

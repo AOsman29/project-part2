@@ -5,7 +5,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("🚀 Starting Graph Project Demo...");
+        System.out.println("Starting Graph Project");
 
         GraphManager manager = new GraphManager();
         manager.addNode("A");
@@ -23,17 +23,17 @@ public class Main {
             GraphParser parser = new GraphParser();
             Graph<String, DefaultEdge> parsedGraph = parser.parseGraph(dotFile);
 
-            System.out.println("✅ Parsed graph structure:");
+            System.out.println(" Parsed graph structure:");
             System.out.println(parser.toString(parsedGraph));
 
             String summaryFile = "graph_summary.txt";
             parser.outputGraph(parsedGraph, summaryFile);
 
-            System.out.println("📝 Graph summary saved to " + summaryFile);
+            System.out.println(" Graph summary saved to " + summaryFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println("🎯 Graph Project completed successfully!");
+        System.out.println(" Graph Project completed succsess!");
     }
 }
