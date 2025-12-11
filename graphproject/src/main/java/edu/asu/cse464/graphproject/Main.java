@@ -4,36 +4,57 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Starting Graph Project");
 
-        GraphManager manager = new GraphManager();
-        manager.addNode("A");
-        manager.addNode("B");
-        manager.addNode("C");
-        manager.addEdge("A", "B");
-        manager.addEdge("B", "C");
-        manager.addEdge("A", "C");
+    public static void main(String[] args) throws Exception {
 
-        String dotFile = "demo_output.dot";
+        System.out.println("=== Starting Graph Project Refactored Part 3 ===");
 
-        try {
-            manager.exportToDot(dotFile);
+   
+        GraphParser parser = new GraphParser();
+        Graph<String, DefaultEdge> loadedGraph = parser.parseGraph("demo.dot");
 
-            GraphParser parser = new GraphParser();
-            Graph<String, DefaultEdge> parsedGraph = parser.parseGraph(dotFile);
+        System.out.println("\n Parsed graph structure:");
+        System.out.println(parser.toString(loadedGraph));
 
-            System.out.println(" Parsed graph structure:");
-            System.out.println(parser.toString(parsedGraph));
+      
+        parser.outputGraph(loadedGraph, "graph_summary.txt");
+        System.out.println(" Graph summary saved to graph_summary.txt");
 
-            String summaryFile = "graph_summary.txt";
-            parser.outputGraph(parsedGraph, summaryFile);
+     
+        GraphManager gm = new GraphManager();
 
-            System.out.println(" Graph summary saved to " + summaryFile);
-        } catch (Exception e) {
-            e.printStackTrace();
+ 
+        for (String v : loadedGraph.vertexSet()) {
+            try { gm.addNode(v); } catch (Exception ignored) {}
         }
 
-        System.out.println(" Graph Project completed succsess!");
+  
+        for (DefaultEdge e : loadedGraph.edgeSet()) {
+            String src = loadedGraph.getEdgeSource(e);
+            String dst = loadedGraph.getEdgeTarget(e);
+
+            try { gm.addEdge(src, dst); } catch (Exception ignored) {}
+        }
+
+        String src = "a";
+        String dst = "h";
+
+
+
+        System.out.println("\n===== BFS (Strategy + Template) =====");
+        Path bfs = gm.runSearch(src, dst, Algorithm.BFS);
+        System.out.println("BFS Path: " + bfs);
+
+        System.out.println("\n===== DFS (Strategy + Template) =====");
+        Path dfs = gm.runSearch(src, dst, Algorithm.DFS);
+        System.out.println("DFS Path: " + dfs);
+
+        System.out.println("\n===== RANDOM WALK (Strategy + Template) =====");
+        for (int i = 1; i <= 5; i++) {
+            Path walk = gm.runSearch(src, dst, Algorithm.RANDOM);
+            System.out.println("Random Attempt " + i + ": " + walk);
+        }
+
+        System.out.println("\n=== Graph Project Completed Successfully ===");
     }
 }

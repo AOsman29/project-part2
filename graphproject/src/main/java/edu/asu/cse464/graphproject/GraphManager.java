@@ -144,4 +144,24 @@ public class GraphManager {
     public Graph<String, DefaultEdge> getGraph() {
         return graph;
     }
+    public Path runSearch(String src, String dst, Algorithm algo) {
+
+        SearchStrategy strategy;
+    
+        switch (algo) {
+            case BFS:
+                strategy = new BFSStrategy();
+                break;
+            case DFS:
+                strategy = new DFSStrategy();
+                break;
+            case RANDOM:
+                strategy = new RandomWalkStrategy(50);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown algorithm: " + algo);
+        }
+    
+        return strategy.search(graph, src, dst);
+    }
 }
