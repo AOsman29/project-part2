@@ -1,11 +1,12 @@
-CSE 464 – Course Project Part 3
+# CSE 464 – Course Project Part 3
+
 Refactoring Directed Graph Search Using Template & Strategy Patterns
 
 Author: Abdalla Osman
 Semester: Fall 2025
 Instructor: Dr. Robert Atkinson
 
-1. Overview
+## 1. Overview
 
 In this part of the project, the original search algorithms (BFS, DFS, Random Walk) were refactored to use:
 
@@ -26,7 +27,7 @@ Search execution
 
 This results in a clean, extensible, object-oriented design.
 
-2. Template Method Pattern
+## 2. Template Method Pattern
 
 The Template Method Pattern provides a generalized workflow for graph searches.
 
@@ -62,7 +63,7 @@ New search algorithms can be added with minimal work.
 
 Code is cleaner, reusable, and aligned with object-oriented practices.
 
-3. Strategy Pattern
+## 3. Strategy Pattern
 
 To support dynamic selection of search algorithms at runtime, we added:
 
@@ -91,7 +92,7 @@ Adding new algorithms requires no changes to Main or GraphManager.
 
 Keeps the system open for extension, closed for modification.
 
-4. Updated Architecture
+## 4. Updated Architecture
 New Key Classes
 Class	Role
 SearchTemplate	Abstract base class defining search workflow
@@ -104,7 +105,7 @@ RandomWalkStrategy	Adapter for Random Walk
 GraphManager	Selects strategies via runSearch()
 Algorithm	Enum for BFS, DFS, RANDOM
 Main	Demonstrates usage of Strategy + Template Patterns
-5. Example Usage
+## 5. Example Usage
 Run BFS
 Path bfs = gm.runSearch("a", "h", Algorithm.BFS);
 
@@ -114,7 +115,7 @@ Path dfs = gm.runSearch("a", "h", Algorithm.DFS);
 Run Random Walk
 Path walk = gm.runSearch("a", "h", Algorithm.RANDOM);
 
-6. Example Output
+## 6. Example Output
 BFS
 BFS Path: a -> e -> f -> h
 
@@ -131,7 +132,7 @@ Random Attempt 3: a -> e -> f -> h
 Random Attempt 4: a -> b -> c -> d
 Random Attempt 5: a -> e -> g -> h
 
-7. Refactor Commit History (Required)
+## 7. Refactor Commit History (Required)
 
 Paste your actual GitHub commit URLs under each section.
 
@@ -155,7 +156,7 @@ Commit 5 – Updated Main.java
 Refactor: Updated Main.java to use Strategy + Template patterns.
 Commit URL: 37017b339eaac05d1f9505a8953a4045624f9312
 
-8. How to Run the Project
+## 8. How to Run the Project
 Compile
 mvn clean compile
 
@@ -165,7 +166,7 @@ mvn exec:java -Dexec.mainClass="edu.asu.cse464.graphproject.Main"
 Run Tests
 mvn -q test
 
-9. Conclusion
+## 9. Conclusion
 
 This refactoring significantly improved the modularity and extensibility of the project. The Template Method Pattern standardized search algorithm structure, while the Strategy Pattern enabled dynamic selection of BFS, DFS, and Random Walk.
 
