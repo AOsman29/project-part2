@@ -19,3 +19,6 @@ public class RandomWalkStrategy implements SearchStrategy {
         return alg.randomWalk(graph, src, dst, maxSteps);
     }
 }
+
+//com
+
